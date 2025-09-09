@@ -12,13 +12,18 @@ llm = GoogleGenerativeAI(
 )
 
 query_prompt = PromptTemplate(
-    template="Tell me about the person {query}. only reaturn the response in a valid markdown format.",
+    template="Tell me about the topic {query}.",
     input_variables=["query"]
 )
 
-chain = query_prompt | llm
+summerize_prompt = PromptTemplate(
+    template="{content} summerize this",
+    input_variables=["content"]
+)
 
-result = chain.invoke({"query":"srk"})
+chain = query_prompt | llm | summerize_prompt | llm
+
+result = chain.invoke({"query":"Durga Puja"})
 # result = llm.invoke("tell me about srk.")
 
 print(result)
